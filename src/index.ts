@@ -28,13 +28,15 @@ app.get('/api/users', async (req: any, res: any) => {
 
 });
 
-app.get('/api/bookmarks/:userId', async (req: any, res: any) => {
-  const { userId } = req.params;
+app.get('/api/bookmarks/:telegramId', async (req: any, res: any) => {
+  const { telegramId } = req.params;
 
     try {
       const bookmarks = await prisma.bookmarks.findMany({
         where: {
-          userId: parseInt(userId), // Convert userId to integer if necessary
+          users: {
+            telegram_id: parseInt(telegramId), // Filter by user's telegramId
+          },
         },
         take: 5, // Limit the results to the first 5
       });
@@ -47,9 +49,6 @@ app.get('/api/bookmarks/:userId', async (req: any, res: any) => {
     }
 
 });
-app.get('/', async (req: any, res: any) => {
-  res.json('Yo');
-})
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
