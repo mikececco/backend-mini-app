@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-app.get('/api/users', async (req, res) => {
+app.get('/api/users', async (req: any, res: any) => {
     try {
         const users = await prisma.users.findMany();
         // Convert BigInt fields to strings or numbers
@@ -28,7 +28,7 @@ app.get('/api/users', async (req, res) => {
 
 });
 
-app.get('/api/bookmarks/:userId', async (req, res) => {
+app.get('/api/bookmarks/:userId', async (req: any, res: any) => {
   const { userId } = req.params;
 
     try {
@@ -47,7 +47,7 @@ app.get('/api/bookmarks/:userId', async (req, res) => {
     }
 
 });
-app.get('/', async (req, res) => {
+app.get('/', async (req: any, res: any) => {
   res.json('Yo');
 })
 
