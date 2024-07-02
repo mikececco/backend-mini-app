@@ -18,6 +18,7 @@
     "prisma": "^5.16.1"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17"
+    "@types/cors": "^2.8.17",
+    "typescript": "^5.5.3"
   }
 }
