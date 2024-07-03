@@ -38,7 +38,7 @@ app.get('/api/bookmarks/:telegramId', async (req: any, res: any) => {
             telegram_id: parseInt(telegramId), // Filter by user's telegramId
           },
         },
-        take: 5, // Limit the results to the first 5
+        // take: 5, // Limit the results to the first 5
       });
 
       res.json(bookmarks);
