@@ -21,8 +21,9 @@ model bookmarks {
   updated_at DateTime
   created_at DateTime     @default(now())
   content    String       @default("default content")
-  folder     String       @default("Bookmarks")
   name       String       @default("My bookmark")
+  folderId   Int
+  folders    folders      @relation(fields: [folderId], references: [id], onDelete: Cascade)
   users      users        @relation(fields: [userId], references: [id], onDelete: Cascade)
   embeddings embeddings[]
 
@@ -38,9 +39,9 @@ model embeddings {
   updated_at DateTime
   created_at DateTime               @default(now())
   bookmarkId Int?
-  bookmarks  bookmarks?             @relation(fields: [bookmarkId], references: [id])
-  thoughts   thoughts?              @relation(fields: [thoughtId], references: [id])
-  users      users                  @relation(fields: [userId], references: [id])
+  bookmarks  bookmarks?             @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  thoughts   thoughts?              @relation(fields: [thoughtId], references: [id], onDelete: Cascade)
+  users      users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model thoughts {
@@ -61,5 +62,16 @@ model users {
   created_at  DateTime     @default(now())
   bookmarks   bookmarks[]
   embeddings  embeddings[]
+  folders     folders[]
   thoughts    thoughts[]
+}
+
+model folders {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @default("Favourites")
+  userId     Int         @default(1)
+  updated_at DateTime
+  created_at DateTime    @default(now())
+  bookmarks  bookmarks[]
+  users      users       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

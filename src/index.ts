@@ -50,6 +50,27 @@ app.get('/api/bookmarks/:telegramId', async (req: any, res: any) => {
 
 });
 
+app.get('/api/folders/:telegramId', async (req: any, res: any) => {
+  const { telegramId } = req.params;
+
+    try {
+      const folders = await prisma.folders.findMany({
+        where: {
+          users: {
+            telegram_id: parseInt(telegramId), // Filter by user's telegramId
+          },
+        },
+        // take: 5, // Limit the results to the first 5
+      });
+
+      res.json(folders);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to fetch users' });
+    }
+
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
