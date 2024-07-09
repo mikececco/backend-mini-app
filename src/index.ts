@@ -28,14 +28,18 @@ app.get('/api/users', async (req: any, res: any) => {
 
 });
 
-app.get('/api/bookmarks/:telegramId', async (req: any, res: any) => {
+app.get('/api/bookmarks/user/:telegramId', async (req: any, res: any) => {
   const { telegramId } = req.params;
+  console.log(telegramId);
+  console.log(typeof telegramId);
+
+
 
     try {
       const bookmarks = await prisma.bookmarks.findMany({
         where: {
           users: {
-            telegram_id: parseInt(telegramId), // Filter by user's telegramId
+            telegram_id: parseInt(telegramId), // Use converted String
           },
         },
         // take: 5, // Limit the results to the first 5
@@ -45,9 +49,26 @@ app.get('/api/bookmarks/:telegramId', async (req: any, res: any) => {
     } catch (error) {
       console.log(error);
 
-        res.status(500).json({ error: 'Failed to fetch users' });
+      res.status(500).json({ error: 'Failed to fetch users' });
     }
 
+});
+
+app.get('/api/bookmarks/folder/:folderId', async (req, res) => {
+  const { folderId } = req.params; // Type assertion to string
+
+  try {
+    const bookmarks = await prisma.bookmarks.findMany({
+      where: {
+        folderId: parseInt(folderId), // Assuming folderId is an integer
+      },
+    });
+
+    res.json(bookmarks);
+  } catch (error) {
+    console.error('Error fetching bookmarks:', error);
+    res.status(500).json({ error: 'Failed to fetch bookmarks' });
+  }
 });
 
 app.get('/api/folders/:telegramId', async (req: any, res: any) => {
