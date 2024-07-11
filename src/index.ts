@@ -71,6 +71,29 @@ app.get('/api/bookmarks/folder/:folderId', async (req, res) => {
   }
 });
 
+// New PUT endpoint
+app.put('/api/bookmarks/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+  const { name, link } = req.body;
+
+  try {
+    const updatedBookmark = await prisma.bookmarks.update({
+      where: {
+        id: parseInt(id, 10),
+      },
+      data: {
+        name,
+        link,
+      },
+    });
+
+    res.json(updatedBookmark);
+  } catch (error) {
+    console.error('Error updating bookmark:', error);
+    res.status(500).json({ error: 'Failed to update bookmark' });
+  }
+});
+
 app.get('/api/folders/:telegramId', async (req: any, res: any) => {
   const { telegramId } = req.params;
 
