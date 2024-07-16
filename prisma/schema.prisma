@@ -23,6 +23,7 @@ model bookmarks {
   content    String       @default("default content")
   name       String       @default("My bookmark")
   folderId   Int
+  tags       String       @default("")
   folders    folders      @relation(fields: [folderId], references: [id], onDelete: Cascade)
   users      users        @relation(fields: [userId], references: [id], onDelete: Cascade)
   embeddings embeddings[]
@@ -68,10 +69,12 @@ model users {
 
 model folders {
   id         Int         @id @default(autoincrement())
-  name       String      @unique @default("Favourites")
+  name       String      @default("Favourites")
   userId     Int         @default(1)
   updated_at DateTime
   created_at DateTime    @default(now())
   bookmarks  bookmarks[]
   users      users       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
 }
