@@ -54,6 +54,25 @@ app.get('/api/bookmarks/user/:telegramId', async (req: any, res: any) => {
 
 });
 
+app.get('/api/bookmarks/:bookmarkId', async (req: any, res: any) => {
+  const { bookmarkId } = req.params;
+
+    try {
+      const bookmark = await prisma.bookmarks.findUnique({
+        where: {
+          id: parseInt(bookmarkId), // Ensure bookmarkId is converted to an integer
+        },
+      });
+
+      res.json(bookmark);
+    } catch (error) {
+      console.log(error);
+
+      res.status(500).json({ error: 'Failed to fetch users' });
+    }
+
+});
+
 app.get('/api/bookmarks/folder/:folderId', async (req, res) => {
   const { folderId } = req.params; // Type assertion to string
 
@@ -91,6 +110,16 @@ app.put('/api/bookmarks/:id', async (req: any, res: any) => {
   } catch (error) {
     console.error('Error updating bookmark:', error);
     res.status(500).json({ error: 'Failed to update bookmark' });
+  }
+});
+
+app.get('/api/bookmarks', async (req, res) => {
+  try {
+    const bookmarks = await prisma.bookmarks.findMany();
+    res.json(bookmarks);
+  } catch (error) {
+    console.error('Error fetching bookmarks:', error);
+    res.status(500).json({ error: 'Failed to fetch bookmarks' });
   }
 });
 
